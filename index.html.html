@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <!-- Load TensorFlow.js -->
+     <script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js"></script>
+
+    <!-- Place your code in the script tag below. You can also use an external .js file -->
+    
+  </head>
+
+  <body>
+  <p>Image URL to Analyze
+    
+	<input type="text" id="imgurl"><br>
+	<button onclick="return loadImg();">Load</button>
+	<button onclick="return analyzeImage();">Analyze</button>
+    <br>
+	Results:<br>
+	Guess 1: <input type="text" id="className" readonly><br>
+	Guess 2: <input type="text" id="className2" readonly><br>
+	Guess 3: <input type="text" id="className3" readonly><br>
+	 <script>
+	 
+	 function loadImg(){
+		let inputUrl = document.getElementById("imgurl").value;
+		//load to page
+		let newImg = document.createElement('img');
+		newImg.src = inputUrl;
+		newImg.id = "loadImg";
+		newImg.width = 400;
+		newImg.crossorigin = "anonymous";
+		document.body.appendChild(newImg);
+	 }
+	 
+	 function analyzeImage(){
+		let targetImage = document.getElementById("loadImg");
+		let analyze = ml5.imageClassifier('MobileNet', function(){	
+		});
+		
+		if(!analyze){
+			alert("error loading classifer");
+		} else {
+			analyze.predict(targetImage, function(error, results){
+			let allResults = results;
+			console.log(allResults);
+			document.getElementById("className").value = results[0].className;
+			document.getElementById("className2").value = results[1].className;
+			document.getElementById("className3").value = results[2].className;
+		});
+		}
+		
+	 }
+	/* 
+     const image = document.getElementById('image');
+      // The result tag in the HTML
+      const result = document.getElementById('result');
+      // The probability tag in the HTML
+      const probability = document.getElementById('probability');
+
+      // Initialize the Image Classifier method with MobileNet
+      const classifier = ml5.imageClassifier('MobileNet', function() {
+        console.log('Model Loaded!');
+      });
+
+      // Make a prediction with the selected image
+      // This will return an array with a default of 10 options with their probabilities
+      classifier.predict(image, function(err, results) {
+        result.innerText = results[0].className;
+        probability.innerText = results[0].probability.toFixed(4);
+      });
+	  */
+    </script>
+  </body>
+</html>
